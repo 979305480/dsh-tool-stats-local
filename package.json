@@ -1,0 +1,79 @@
+{
+  "name": "dsh-tool-stats",
+  "version": "0.7.0-local.1",
+  "description": "工具调用统计（本地接管版）。原包 npm 已下架、作者弃坑，此处接过来自行维护。Every tool call is counted.",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "dsh-tool-stats": "lib/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/client/index.d.ts",
+      "default": "./lib/stats.web.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LOCAL-NOTES.md"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "tools",
+    "analytics",
+    "usage"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  },
+  "license": "MIT",
+  "author": "hj01857655（原作者）· 本机接管维护：程序助手",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hj01857655/dsh-plugins.git",
+    "directory": "packages/dsh-tool-stats"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "_localFork": {
+    "why": "原包 2026-10-27 从 npm 整包下架（14 个版本全删），作者弃坑，内核再变就没人修了",
+    "source": "从 profile node_modules\\dsh-tool-stats@0.6.1 原样拷贝",
+    "changed": [
+      "version → 0.7.0-local.1",
+      "peerDependencies cordis ~4.0.4 → ^4.1.0（新内核 0.2.2-rc.3 用的就是 4.1.0）",
+      "去掉 devDependencies / scripts（编译产物直接使用，无 TS 源码）",
+      "新增 LOCAL-NOTES.md"
+    ],
+    "verifiedOn": "DSH NEXT 2.0.23-next / 内核 0.2.2-rc.3 / 2026-11-17",
+    "upstreamWorks": "原包 0.6.1 在新内核下实测完全正常（后端记录 + HTTP 路由 + 设置页面板都通），本 fork 不改逻辑，只为保住改的能力"
+  }
+}
