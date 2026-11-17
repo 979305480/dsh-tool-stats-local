@@ -47,7 +47,7 @@
     }
   },
   "license": "MIT",
-  "author": "hj01857655（原作者）· 本机接管维护：程序助手",
+  "author": "hj01857655（原作者）· fork 维护：YunFei（DeepSeek）",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hj01857655/dsh-plugins.git",
