@@ -2,6 +2,8 @@
 
 > **这个包是从 npm 下架的 `dsh-tool-stats@0.6.1` 原样接过来的本地 fork。**
 > 接管日期 **2026-11-17**，接管原因见下。**逻辑一行没改**，只改了版本声明和依赖范围。
+>
+> 📦 **公开存档**：https://github.com/979305480/dsh-tool-stats-local （2026-11-17 上传，34 个文件含完整目录结构）
 
 ---
 
@@ -31,7 +33,7 @@ _项目\dsh-tool-stats\
     ├── collect.js        【采集】pre-execute 起表 / result 结算成一条调用记录
     ├── stats.js          【数据层】ToolStats 类：记录/汇总/查询/详情/CSV/清空
     ├── store.js          【落盘】append-only JSONL，写在 process.cwd()\.toolstats\calls.jsonl
-    │                     （实测落在 C:\Users\麻鸭\.dsh\profiles\web\.toolstats\ —— 因为 host 进程的 cwd 是 profile 目录）
+    │                     （实测落在 %USERPROFILE%\.dsh\profiles\web\.toolstats\ —— 因为 host 进程的 cwd 是 profile 目录）
     ├── analyzer.js       【分析】聚合、死工具、高失败率、建议、告警
     ├── routes.js         【HTTP】4 个接口，见下表
     ├── cli.js / bin.js   【命令行】dsh-tool-stats 子命令
@@ -87,9 +89,9 @@ _项目\dsh-tool-stats\
   改 `_项目\dsh-tool-stats\` 里的文件**不会自动同步**到 profile 的 `node_modules`。完整流程：
 
   ```powershell
-  # 1. 改文件（就在 D:\RuanJian\Apps\_项目\dsh-tool-stats\ 里改）
+  # 1. 改文件（就在 <本仓库根目录>\ 里改）
   # 2. 重新装（让 pnpm 把新文件复制进 profile）
-  & "D:\RuanJian\Apps\01_System\HuanJing\nodejs\dsh.cmd" plugin --profile web add "file:D:/RuanJian/Apps/_项目/dsh-tool-stats"
+  & "dsh" plugin --profile web add "file:<本仓库绝对路径>"
   # 3. 完全退出 App（托盘退出，不是关窗口）再打开
   ```
 
@@ -116,17 +118,17 @@ _项目\dsh-tool-stats\
 
 ```powershell
 # 1. profile\package.json 里把这行改回去
-#    "dsh-tool-stats": "file:D:/RuanJian/Apps/_项目/dsh-tool-stats"
+#    "dsh-tool-stats": "file:<本仓库绝对路径>"
 # 改成原来的本地 tgz（那个 tgz 还在，见下）
-#    "dsh-tool-stats": "file:D:/RuanJian/Apps/_upgrade-staging/dsh-tool-stats-0.6.1.tgz"
+#    "dsh-tool-stats": "file:<官方 0.6.1 原件 tgz>"
 
 # 2. 重装依赖
-& "D:\RuanJian\Apps\01_System\HuanJing\nodejs\dsh.cmd" plugin --profile web add dsh-tool-stats
+& "dsh" plugin --profile web add dsh-tool-stats
 
 # 3. 完全退出 App 再开
 ```
 
-⚠️ **`D:\RuanJian\Apps\_upgrade-staging\dsh-tool-stats-0.6.1.tgz` 别删** —— 它是最初的官方原件，回滚用。
+⚠️ **`<官方 0.6.1 原件 tgz>` 别删** —— 它是最初的官方原件，回滚用。
 
 ---
 
@@ -134,8 +136,8 @@ _项目\dsh-tool-stats\
 
 | 项 | 位置 |
 | --- | --- |
-| 调用记录 | 🔴 **只有一份**：`C:\Users\麻鸭\.dsh\profiles\web\.toolstats\calls.jsonl` |
-| 为什么不在各工作区 | `lib/index.js` 用 `resolve(process.cwd())` 当数据根，而 host 进程的 cwd 是 profile 目录 → **所有工作区、所有助手共用这一份统计**（2026-11-17 实测确认：`D:\RuanJian\Apps\.toolstats` / `D:\RuanJian\.toolstats` / `D:\Game\.toolstats` 都不存在） |
+| 调用记录 | 🔴 **只有一份**：`%USERPROFILE%\.dsh\profiles\web\.toolstats\calls.jsonl` |
+| 为什么不在各工作区 | `lib/index.js` 用 `resolve(process.cwd())` 当数据根，而 host 进程的 cwd 是 profile 目录 → **所有工作区、所有助手共用这一份统计**（2026-11-17 实测确认：工作区根下都没有 `.toolstats` 目录，说明不按工作区分库） |
 | 格式 | 每行一条 JSON：`tool / timestamp / success / latencyMs / sessionId / errorMessage? / contentBytes? / untimed?` |
 | 想清空 | 面板上「清空」按钮，或直接删 `calls.jsonl` |
 | 想看总量 | 面板顶部：总调用 / 总失败 / 失败率 / 会话数 / 平均延迟 |
@@ -144,9 +146,9 @@ _项目\dsh-tool-stats\
 统计会另起一份新文件，看起来像"历史数据丢了"。真要把数据钉死，改 `lib/index.js` 第 7 行：
 
 ```js
-const root = resolve(process.cwd());   // ← 改成固定路径，如 resolve('C:/Users/麻鸭/.dsh/profiles/web')
+const root = resolve(process.cwd());   // ← 改成固定路径，如 resolve('%USERPROFILE%/.dsh/profiles/web')
 ```
 
 ---
 
-*接管维护：程序助手 · 2026-11-17*
+*接管维护：YunFei（DeepSeek）· 2026-11-17*
